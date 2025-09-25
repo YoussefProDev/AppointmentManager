@@ -94,14 +94,18 @@ public class GestioneAgende {
         while (!exit) {
 
         System.out.println("1) Visualizzi l'impegni del mese");
-        System.out.println("2) Esci");
-        int scelta = numberInput("Seleziona un'opzione: ", 1, 2);
+        System.out.println("2) Visualizzi l'impegni nei prossimi 7 giorni");
+        System.out.println("3) Visualizzi l'impegni nei prossimi 15 giorni");
+        System.out.println("4) Visualizzi l'impegni nei prossimi 30 giorni");
+        System.out.println("5) Visualizzi l'immpegni della settimana corrente");
+        System.out.println("6) Esci");
+        int scelta = numberInput("Seleziona un'opzione: ", 1, 6);
             switch (scelta) {
                 case 1:
                     
                     System.out.println("Digita l'anno (es. 2024):");
                     int anno=scanner.nextInt();
-                    scanner.nextLine()
+                    scanner.nextLine();
                     System.out.println("Digita il mese (1-12):");
                     int mese=scanner.nextInt();
                     scanner.nextLine();
@@ -109,11 +113,46 @@ public class GestioneAgende {
 
                 break;
                 case 2:
-                 exit=true;
-                 break;
+                    TerminalCalendar.renderDays(7,true,riempiArray());
+                break;
+                case 3:
+                    TerminalCalendar.renderDays(15,true,riempiArray());
+                break;
+                case 4:
+                    TerminalCalendar.renderDays(30,true,riempiArray());
+                break;
+                case 5:
+                    TerminalCalendar.renderDays(7,false,riempiArray());
+                break;
+                case 6:
+                    exit = true;
+                break;
+                default:
+                    System.out.println("Scelta non valida, riprova.");
+                break;
             }
         }
     }
+
+  /* public void renderNextDays(int days, String[] agende) {
+        LocalDate today = LocalDate.now();
+        LocalDate endDate = today.plusDays(days);
+        
+        System.out.println("Appuntamenti nei prossimi " + days + " giorni:");
+
+        for (String agendaName : agende) {
+            Agenda agenda = new Agenda(agendaName);
+            List<Appuntamento> appuntamenti = agenda.getAppuntamentiBetween(today, endDate);
+
+            if (!appuntamenti.isEmpty()) {
+                System.out.println("Agenda: " + agendaName);
+                for (Appuntamento app : appuntamenti) {
+                    System.out.println(app);
+                }
+            }
+        }
+    }*/
+
     public void visualizzaAgende() {
         int scl=0;
 
