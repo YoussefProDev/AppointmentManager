@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class GestioneAgende {
-    
-    List<Agende> agn = new ArrayList<Agende>();
+
     List<String> agende;    
     int scelta=0;
     Scanner scanner=new Scanner(System.in);
