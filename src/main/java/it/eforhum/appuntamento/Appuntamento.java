@@ -20,5 +20,59 @@ public class Appuntamento {
         this.stato = stato;
     }
 
+    public LocalDate getData() {
+        return data;
+    }
+
+    public LocalTime getOraInizio() {
+        return oraInizio;
+    }
+
+    public LocalTime getOraFine() {
+        return oraFine;
+    }
+
+    public String getDescrizione(){
+        return descrizione;
+    }
+
+    public String getPosizione() {
+        return posizione;
+    }
+
+    public boolean isStato() {
+        return stato;
+    }
+
+    public void setData(LocalDate data) {
+        this.data = data;
+    }
     
+    public void setOraInizio(LocalTime oraInizio) {
+        this.oraInizio = oraInizio;
+    }
+
+    public void setOraFine(LocalTime oraFine) {
+        this.oraFine = oraFine;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
+    public void setPosizione(String posizione) {
+        this.posizione = posizione;
+    }
+
+    public void setStato(boolean stato) {
+        this.stato = stato;
+    }
+
+    public String show(){
+        return data + " " + oraInizio + " " + oraFine + " " + descrizione + " " + posizione + " " + stato;
+    }
+
+    public String prepear(){
+        return "-||-" + data + "|--|" + oraInizio + "|--|" + oraFine + "|--|" + descrizione + "|--|" + posizione + "|--|" + stato + "-||-";
+    }
 }
