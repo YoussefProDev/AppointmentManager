@@ -24,7 +24,7 @@ public class GestioneAgende {
         while (!exit) {
             System.out.println("Menu Gestione Agende");
             System.out.println("1. Crea Agenda");
-            System.out.println("2.Visualizza Appuntamenti tutte le agende");
+            System.out.println("2. Visualizza Appuntamenti tutte le agende");
             System.out.println("3. Visualizza Agende");
             System.out.println("4. Modifica Agenda");
             System.out.println("5. Elimina Agenda");
