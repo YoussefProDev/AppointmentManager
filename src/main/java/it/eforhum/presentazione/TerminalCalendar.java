@@ -107,6 +107,13 @@ public class TerminalCalendar {
 
     private static ArrayList<Appuntamento> getAppuntamentiFromAgenda(String[] agende) {
         ArrayList<Appuntamento> appts = new ArrayList<>();
+        for (String agendaName : agende) {
+            Agenda agenda = new Agenda(agendaName);
+            ArrayList<Appuntamento> list = agenda.getAppuntamenti();
+            if (list != null) {
+                appts.addAll(list);
+            }
+        }
         return appts;
     }
 
