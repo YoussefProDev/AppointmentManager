@@ -1,4 +1,5 @@
 package it.eforhum.agenda;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,32 +17,31 @@ import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
 public class Agenda {
-  
+
     ArrayList<Appuntamento> appuntamenti;
     String nome;
     String filename;
 
-    public Agenda(String nome) throws Exception{
+    public Agenda(String nome) throws Exception {
         this.nome = nome;
-        this.filename = nome +".txt";
-        this. appuntamenti = new ArrayList<Appuntamento>();
-        
-        try{
+        this.filename = nome + ".txt";
+        this.appuntamenti = new ArrayList<Appuntamento>();
+
+        try {
 
             this.riempiDaFile();
-        }catch(Exception e){
-            
+        } catch (Exception e) {
+
         }
 
     }
 
-    public void riempiDaFile() throws FileNotFoundException{
-    File file = new File(this.filename);
-        if (!file.exists()){
-           // throw FileNotFoundException; 
-           return;
+    public void riempiDaFile() throws FileNotFoundException {
+        File file = new File(this.filename);
+        if (!file.exists()) {
+            // throw FileNotFoundException;
+            return;
         }
-          
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
@@ -85,16 +85,14 @@ public class Agenda {
         return true;
     }
 
-    public void elimina(int index){
+    public void elimina(int index) {
         this.appuntamenti.remove(index);
     }
 
+    public void inserisciAppuntamento(LocalDate data, LocalTime ora, LocalTime ora_fine, String posizione,
+            String descrizione) {
 
-public void inserisciAppuntamento(LocalDate data, LocalTime ora, LocalTime ora_fine, String posizione, String descrizione){
-
-
-
-        if(ora_fine.isBefore(ora)){
+        if (ora_fine.isBefore(ora)) {
             System.out.println("Intervallo temporale non valido");
             return;
         }
@@ -103,258 +101,330 @@ public void inserisciAppuntamento(LocalDate data, LocalTime ora, LocalTime ora_f
             System.out.println("Intervallo temporale non valido");
             return;
         }
-  
+
         appuntamenti.add(new Appuntamento(data, ora, ora_fine, posizione, false, descrizione));
         sort();
         scriviFile();
     }
 
-    public void menu(){
+    public void menu() {
         boolean errore = false;
         Scanner s = new Scanner(System.in);
-        int scelta = 0; 
+        int scelta = 0;
 
-        do{
+        do {
 
-            try{
+            try {
                 errore = false;
                 System.out.println("seleziona azione");
-                System.out.println("1-\tnuovo appuntamento\n2-\tmodifica appuntamento\n3-\telimina appuntamento\n4-\tvisualizza appuntamenti\n0-\tesci");
+                System.out.println(
+                        "1-\tnuovo appuntamento\n2-\tmodifica appuntamento\n3-\telimina appuntamento\n4-\tvisualizza appuntamenti\n0-\tesci");
                 scelta = s.nextInt();
-                
-                if(scelta < 0 || scelta >4){
+
+                if (scelta < 0 || scelta > 4) {
                     errore = true;
                     System.out.println("input non valido");
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("input non valido");
                 errore = true;
             }
 
-        }while(errore);
+        } while (errore);
 
-        switch(scelta){
+        switch (scelta) {
             case 1:
-            LocalDate data;
-            LocalTime ora;
-            LocalTime ora_fine;
-            String descrizione;
-            String posizione;
+                LocalDate data;
+                LocalTime ora;
+                LocalTime ora_fine;
+                String descrizione;
+                String posizione;
 
-                
-                //------------------DATA
-                        do{
-                            System.out.println("inserisci data dd-mm-aaaa");
-                            try{
-                                    errore = false;
-                                    String input = s.next();
-                                    String[] data_temp = input.split("-");
-                                     data = LocalDate.of(Integer.parseInt(data_temp[0]), Month.of(Integer.parseInt(data_temp[1])) , Integer.parseInt(data_temp[2]));
+                // ------------------DATA
+                do {
+                    System.out.println("inserisci data dd-mm-aaaa");
+                    try {
+                        errore = false;
+                        String input = s.next();
+                        String[] data_temp = input.split("-");
+                        data = LocalDate.of(Integer.parseInt(data_temp[0]), Month.of(Integer.parseInt(data_temp[1])),
+                                Integer.parseInt(data_temp[2]));
 
-                                }catch(Exception e){
-                                    System.out.println("input non valido");
-                                    errore = true;
-                                }
+                    } catch (Exception e) {
+                        System.out.println("input non valido");
+                        errore = true;
+                    }
 
-                         }while(errore);
+                } while (errore);
 
-                //-------------------ORA
-                        do{
-                            System.out.println("inserisci ora ore:minuti");
-                            try{
-                                    errore = false;
-                                    String input = s.next();
-                                    String[] ora_temp = input.split(":");
-                                     ora = LocalTime.of(Integer.parseInt(ora_temp[0]),Integer.parseInt(ora_temp[1]));
+                // -------------------ORA
+                do {
+                    System.out.println("inserisci ora ore:minuti");
+                    try {
+                        errore = false;
+                        String input = s.next();
+                        String[] ora_temp = input.split(":");
+                        ora = LocalTime.of(Integer.parseInt(ora_temp[0]), Integer.parseInt(ora_temp[1]));
 
-                                }catch(Exception e){
-                                    System.out.println("input non valido");
-                                    errore = true;
-                                }
+                    } catch (Exception e) {
+                        System.out.println("input non valido");
+                        errore = true;
+                    }
 
-                         }while(errore);
+                } while (errore);
 
-                                //-------------------Fine
-                        do{
-                            System.out.println("inserisci ora ore:minuti");
-                            try{
-                                    errore = false;
-                                    String input = s.next();
-                                    String[] oraf_temp = input.split(":");
-                                     ora_fine = LocalTime.of(Integer.parseInt(oraf_temp[0]),Integer.parseInt(oraf_temp[1]));
-                                     
-                                     if(ora.compareTo(ora_fine) < 0){
-                                        System.out.println("ora fine non può essere minore di ora inizio");
-                                        errore = true;
-                                     }
+                // -------------------Fine
+                do {
+                    System.out.println("inserisci ora ore:minuti");
+                    try {
+                        errore = false;
+                        String input = s.next();
+                        String[] oraf_temp = input.split(":");
+                        ora_fine = LocalTime.of(Integer.parseInt(oraf_temp[0]), Integer.parseInt(oraf_temp[1]));
 
-                                }catch(Exception e){
-                                    System.out.println("input non valido");
-                                    errore = true;
-                                }
+                        if (ora.compareTo(ora_fine) < 0) {
+                            System.out.println("ora fine non può essere minore di ora inizio");
+                            errore = true;
+                        }
 
-                         }while(errore);
+                    } catch (Exception e) {
+                        System.out.println("input non valido");
+                        errore = true;
+                    }
 
-                    //--------------Descrizione
+                } while (errore);
 
-                        do{
-                            System.out.println("inserisci descrizione");
-                            try{
-                                    errore = false;
-                                    String input = s.next();
-                                    descrizione = input;
+                // --------------Descrizione
 
+                do {
+                    System.out.println("inserisci descrizione");
+                    try {
+                        errore = false;
+                        String input = s.next();
+                        descrizione = input;
 
-                                }catch(Exception e){
-                                    System.out.println("input non valido");
-                                    errore = true;
-                                }
+                    } catch (Exception e) {
+                        System.out.println("input non valido");
+                        errore = true;
+                    }
 
-                         }while(errore);
+                } while (errore);
 
-                    //------------------posizione
+                // ------------------posizione
 
-                        do{
-                            System.out.println("inserisci posizione");
-                            try{
-                                    errore = false;
-                                    String input = s.next();
-                                    posizione = input;
+                do {
 
-                                }catch(Exception e){
-                                    System.out.println("input non valido");
-                                    errore = true;
-                                }
-                         }while(errore);
+                    System.out.println("inserisci posizione");
+                    try {
+                        errore = false;
+                        String input = s.next();
+                        posizione = input;
 
+                    } catch (Exception e) {
+                        System.out.println("input non valido");
+                        errore = true;
+                    }
+                } while (errore);
 
-                         this.appuntamenti.add(new Appuntamento(data, ora, ora_fine, descrizione, posizione, false));
-                         ordina();
-            break;
-           
+                this.appuntamenti.add(new Appuntamento(data, ora, ora_fine, descrizione, posizione, false));
+                ordina();
+                break;
+
             case 2:
 
-            //--------------------modifica
-                        this.mostra();
-                         int input = 0;
+                // --------------------modifica
+                this.mostra();
+                int input = 0;
 
-                       do{
-                        
-                            System.out.println("scegli numero appuntamento da eliminare");
-                            try{
-                                    errore = false;
-                                     input = s.nextInt();
-                                   if(input < 0 || input >= this.appuntamenti.size()){
-                                     errore = true;
-                                   }
+                do {
+                    errore = false;
 
-                                }catch(Exception e){
-                                    System.out.println("input non valido");
+                    System.out.println("scegli numero appuntamento da modificare");
+                    try {
+                        errore = false;
+                        input = s.nextInt();
+                        if (input < 0 || input >= this.appuntamenti.size()) {
+                            errore = true;
+                        }
+
+                    } catch (Exception e) {
+                        System.out.println("input non valido");
+                        errore = true;
+                    }
+
+                } while (errore);
+
+                Appuntamento temp_app = this.appuntamenti.get(input);
+
+                do {
+                    errore = false;
+
+                    System.out.println(
+                            "1-\tmodifica data \n2-\tmodifica ora inizio\n3-\tmodifica ora fine\n4-\tmodifica descrizione \n5-\tmodifica posizione");
+
+                    try {
+                        errore = false;
+                        input = s.nextInt();
+                        if (input < 0 || input >= this.appuntamenti.size()) {
+                            errore = true;
+                        }
+
+                    } catch (Exception e) {
+                        System.out.println("input non valido");
+                        errore = true;
+                    }
+
+                } while (errore);
+
+                switch (input) {
+                    case 1: // modifica data
+
+                        do {
+                            System.out.println("inserisci data dd-mm-aaaa");
+                            try {
+                                errore = false;
+                                String nuova_data = s.nextLine();
+
+                                String[] data_temp = nuova_data.split("-");
+                                temp_app.setData(LocalDate.of(Integer.parseInt(data_temp[0]),
+                                        Month.of(Integer.parseInt(data_temp[1])),
+                                        Integer.parseInt(data_temp[2])));
+
+                            } catch (Exception e) {
+                                System.out.println("input non valido");
+                                errore = true;
+                            }
+
+                        } while (errore);
+
+                        break;
+                    case 2:// modifica ora
+
+                        do {
+                            System.out.println("inserisci ora ore:minuti");
+                            try {
+                                errore = false;
+                                String nuova_ora = s.nextLine();
+                                String[] ora_temp = nuova_ora.split(":");
+                                temp_app.setOraInizio(
+                                        LocalTime.of(Integer.parseInt(ora_temp[0]), Integer.parseInt(ora_temp[1])));
+
+                            } catch (Exception e) {
+                                System.out.println("input non valido");
+                                errore = true;
+                            }
+
+                        } while (errore);
+
+                        break;
+                    case 3:
+                        do {
+                            System.out.println("inserisci ora ore:minuti");
+                            try {
+                                errore = false;
+                                String nuova_ora_fine = s.nextLine();
+                                String[] oraf_temp = nuova_ora_fine.split(":");
+                                temp_app.setOraFine(
+                                        LocalTime.of(Integer.parseInt(oraf_temp[0]), Integer.parseInt(oraf_temp[1])));
+
+                                if (ora.compareTo(ora_fine) < 0) {
+                                    System.out.println("ora fine non può essere minore di ora inizio");
                                     errore = true;
                                 }
 
-                         }while(errore);
+                            } catch (Exception e) {
+                                System.out.println("input non valido");
+                                errore = true;
+                            }
 
+                        } while (errore);
 
-                        do{
-                        
-                            System.out.println("1-\tmodifica data \n2-\tmodifica ora inizio\n3-\tmodifica ora fine\n4-\tmodifica descrizione \n5-\tmodifica posizione");
-                            
-                            try{
-                                    errore = false;
-                                     input = s.nextInt();
-                                   if(input < 0 || input >= this.appuntamenti.size()){
-                                     errore = true;
-                                   }
+                        break;
+                    case 4://modifica descrizione
+                                    do {
+                    System.out.println("inserisci descrizione");
+                    try {
+                        errore = false;
+                        String nuova_descrizione = s.nextLine();
+                        temp_app.setDescrizione(nuova_descrizione)
 
-                                }catch(Exception e){
-                                    System.out.println("input non valido");
-                                    errore = true;
-                                }
+                    } catch (Exception e) {
+                        System.out.println("input non valido");
+                        errore = true;
+                    }
 
-                         }while(errore);
+                } while (errore);
 
-                         switch (input) {
-                            case 1:
-                                
-                                break;
-                            case 2:
-                                
-                                break;
-                            case 3:
-                                
-                                break;
-                            case 4:
-                                
-                                break;
-                            case 5:
-                                
-                                break;
-                         
-                            default:
-                                break;
-                         }
+                        break;
+                    case 5:// modifica posizione
+                         do {
 
-                         
+                    System.out.println("inserisci posizione");
+                    try {
+                        errore = false;
+                        String nuova_posizione = s.next();
+                        temp_app.setPosizione(nuova_posizione);
 
+                    } catch (Exception e) {
+                        System.out.println("input non valido");
+                        errore = true;
+                    }
+                } while (errore);
+                        break;
 
+                    default:
+                        break;
+                }
 
-
-            break;
+                break;
             case 3:
-                         mostra();
-                         input = 0;
+                mostra();
+                input = 0;
 
+                // --------------selezione appuntamento
+                do {
+                    System.out.println("scegli numero appuntamento da eliminare");
+                    try {
+                        errore = false;
+                        input = s.nextInt();
+                        if (input < 0 || input >= this.appuntamenti.size()) {
+                            errore = true;
+                        }
 
-                         //--------------selezione appuntamento
-                  do{
-                            System.out.println("scegli numero appuntamento da eliminare");
-                            try{
-                                    errore = false;
-                                     input = s.nextInt();
-                                   if(input < 0 || input >= this.appuntamenti.size()){
-                                     errore = true;
-                                   }
+                    } catch (Exception e) {
+                        System.out.println("input non valido");
+                        errore = true;
+                    }
 
-                                }catch(Exception e){
-                                    System.out.println("input non valido");
-                                    errore = true;
-                                }
+                } while (errore);
 
-                         }while(errore);
-
-                        elimina(input);
-
+                elimina(input);
 
             case 4:
                 this.mostra();
-            break;
+                break;
 
             case 0:
-                         return;
-            break;
+                return;
+                break;
 
-            
         }
-
-       
 
     }
 
-     private void mostra(){
-                for(int i = 0; i < this.appuntamenti.size(); i++){
-                    System.out.println("\n\nappuntamento numero "+i);
-                    System.out.println(this.appuntamenti.get(i).show());
-                }
+    private void mostra() {
+        for (int i = 0; i < this.appuntamenti.size(); i++) {
+            System.out.println("\n\nappuntamento numero " + i);
+            System.out.println(this.appuntamenti.get(i).show());
         }
+    }
 
-    private void modifica(int index, LocalDate data, LocalTime ora, LocalTime ora_fine, String posizione, String descrizione){
-        this.appuntamenti.replace(index, new  Appuntamento(data, ora, ora_fine, posizione, false, descrizione));
+    private void modifica(int index, LocalDate data, LocalTime ora, LocalTime ora_fine, String posizione,
+            String descrizione) {
+        this.appuntamenti.replace(index, new Appuntamento(data, ora, ora_fine, posizione, false, descrizione));
 
     }
 
-
- 
     private void ordina() {
         appuntamenti.sort((a1, a2) -> {
             int cmp = a1.getData().compareTo(a2.getData());
@@ -363,17 +433,12 @@ public void inserisciAppuntamento(LocalDate data, LocalTime ora, LocalTime ora_f
             cmp = a1.getOra().compareTo(a2.getOra());
             if (cmp != 0)
                 return cmp;
-             // urgenza decrescente
+            // urgenza decrescente
         });
     }
 
-    private void getAppuntamentoOn(LocalDate data){
+    private void getAppuntamentoOn(LocalDate data) {
 
     }
-
-
-
-
-
 
 }
